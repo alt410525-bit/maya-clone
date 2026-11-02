@@ -1,0 +1,16 @@
+.class public final synthetic LCM0;
+.super Ljava/lang/Object;
+.source "SourceFile"
+
+# interfaces
+.implements Landroid/media/MediaPlayer$OnCompletionListener;
+
+
+# virtual methods
+.method public final onCompletion(Landroid/media/MediaPlayer;)V
+    .locals 0
+
+    invoke-virtual {p1}, Landroid/media/MediaPlayer;->release()V
+
+    return-void
+.end method

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<voice-interaction-service android:sessionService="com.getmaya.android.assistant.MayaVoiceInteractionSessionService" android:recognitionService="com.getmaya.android.assistant.MayaRecognitionService" android:supportsAssist="true" android:supportsLaunchVoiceAssistFromKeyguard="true"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

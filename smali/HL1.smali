@@ -1,0 +1,51 @@
+.class public final LHL1;
+.super LYJ;
+.source "SourceFile"
+
+
+# instance fields
+.field public synthetic Q:Ljava/lang/Object;
+
+.field public final synthetic R:LYX0;
+
+.field public S:I
+
+
+# direct methods
+.method public constructor <init>(LYX0;LXJ;)V
+    .locals 0
+
+    iput-object p1, p0, LHL1;->R:LYX0;
+
+    invoke-direct {p0, p2}, LYJ;-><init>(LXJ;)V
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final w(Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 2
+
+    iput-object p1, p0, LHL1;->Q:Ljava/lang/Object;
+
+    iget p1, p0, LHL1;->S:I
+
+    const/high16 v0, -0x80000000
+
+    or-int/2addr p1, v0
+
+    iput p1, p0, LHL1;->S:I
+
+    const/4 p1, 0x0
+
+    const/4 v0, 0x0
+
+    iget-object v1, p0, LHL1;->R:LYX0;
+
+    invoke-virtual {v1, p1, v0, p1, p0}, LYX0;->l(Landroid/content/Context;ZLP40;LXJ;)Ljava/lang/Object;
+
+    move-result-object p1
+
+    return-object p1
+.end method

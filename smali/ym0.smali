@@ -1,0 +1,31 @@
+.class public final Lym0;
+.super Lzm0;
+.source "SourceFile"
+
+
+# static fields
+.field public static final a:Lym0;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 1
+
+    new-instance v0, Lym0;
+
+    invoke-direct {v0}, Ljava/lang/Object;-><init>()V
+
+    sput-object v0, Lym0;->a:Lym0;
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final toString()Ljava/lang/String;
+    .locals 1
+
+    const-string v0, "WrongSecret"
+
+    return-object v0
+.end method

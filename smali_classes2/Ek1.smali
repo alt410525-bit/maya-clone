@@ -1,0 +1,60 @@
+.class public final synthetic LEk1;
+.super Lc50;
+.source "SourceFile"
+
+# interfaces
+.implements LU40;
+
+
+# static fields
+.field public static final V:LEk1;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 7
+
+    new-instance v6, LEk1;
+
+    const-class v2, LGk1;
+
+    const-string v3, "createSegment"
+
+    const/4 v1, 0x2
+
+    const-string v4, "createSegment(JLkotlinx/coroutines/sync/SemaphoreSegment;)Lkotlinx/coroutines/sync/SemaphoreSegment;"
+
+    const/4 v5, 0x1
+
+    move-object v0, v6
+
+    invoke-direct/range {v0 .. v5}, Lc50;-><init>(ILjava/lang/Class;Ljava/lang/String;Ljava/lang/String;I)V
+
+    sput-object v6, LEk1;->V:LEk1;
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final j(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 3
+
+    check-cast p1, Ljava/lang/Number;
+
+    invoke-virtual {p1}, Ljava/lang/Number;->longValue()J
+
+    move-result-wide v0
+
+    check-cast p2, LHk1;
+
+    sget p1, LGk1;->a:I
+
+    new-instance p1, LHk1;
+
+    const/4 v2, 0x0
+
+    invoke-direct {p1, v0, v1, p2, v2}, LHk1;-><init>(JLHk1;I)V
+
+    return-object p1
+.end method

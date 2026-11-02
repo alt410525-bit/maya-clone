@@ -1,0 +1,41 @@
+.class public final LQX0;
+.super LRX0;
+.source "SourceFile"
+
+
+# static fields
+.field public static final c:LQX0;
+
+
+# direct methods
+.method static constructor <clinit>()V
+    .locals 3
+
+    new-instance v0, LQX0;
+
+    const/4 v1, 0x0
+
+    const/4 v2, 0x3
+
+    invoke-direct {v0, v1, v1, v2}, LRX0;-><init>(III)V
+
+    sput-object v0, LQX0;->c:LQX0;
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final a(LGC;LPf;Lrr1;LsG;)V
+    .locals 0
+
+    invoke-interface {p2}, LPf;->f()Ljava/lang/Object;
+
+    move-result-object p1
+
+    check-cast p1, LWF;
+
+    invoke-interface {p1}, LWF;->c()V
+
+    return-void
+.end method
