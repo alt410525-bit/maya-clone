@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,8 +20,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # GitHub ubuntu runners ship the Android SDK pre-installed.
-      # Install official apktool jar which bundles a working aapt.
       - name: Install apktool
         run: |
           sudo apt-get update
@@ -34,6 +32,26 @@ jobs:
       - name: Build with apktool
         run: |
           apktool b . -o maya.apk --force
+          ls -lh maya.apk
+
+      - name: Sign APK
+        env:
+          KS_B64: ${{ secrets.APKSIGNER_BASE64 }}
+          PASS: ${{ secrets.APKSIGNER_STOREPASS }}
+          ALIAS: ${{ secrets.APKSIGNER_ALIAS }}
+        run: |
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > maya.keystore
+            PASS=${PASS:-maya12345}
+            ALIAS=${ALIAS:-maya}
+          else
+            keytool -genkeypair -v -keystore maya.keystore -alias maya -keyalg RSA -keysize 2048 -validity 10000 -storepass ci_maya_pass -keypass ci_maya_pass -dname "CN=Maya Clone, OU=Dev, O=Maya, L=City, ST=State, C=IN" >/dev/null 2>&1
+            PASS=ci_maya_pass
+            ALIAS=maya
+          fi
+          jarsigner -keystore maya.keystore -storepass "$PASS" -keypass "$PASS" -signedjar maya-signed.apk maya.apk "$ALIAS" 2>&1 | grep -v "^Warning:" || true
+          jarsigner -verify maya-signed.apk && echo "SIGN OK" || echo "sign verify failed (continuing)"
+          mv maya-signed.apk maya.apk
           ls -lh maya.apk
 
       - name: Upload APK artifact

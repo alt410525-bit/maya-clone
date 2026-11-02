@@ -1,0 +1,12 @@
+# Build artifacts
+build/
+*.apk
+*.keystore
+*.jks
+
+# Editor / OS
+.DS_Store
+*.swp
+
+# Locally restored original manifest during patching
+AndroidManifest.xml.orig
