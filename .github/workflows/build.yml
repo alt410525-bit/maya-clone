@@ -20,6 +20,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      # GitHub ubuntu runners ship the Android SDK pre-installed:
+      # zipalign and apksigner come from build-tools (on ANDROID_HOME path).
       - name: Install apktool
         run: |
           sudo apt-get update
@@ -28,18 +30,26 @@ jobs:
           printf '#!/bin/bash\nexec java -jar /tmp/apktool.jar "$@"\n' | sudo tee /usr/local/bin/apktool > /dev/null
           sudo chmod +x /usr/local/bin/apktool
           apktool --version
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls "$ANDROID_HOME/build-tools/" 2>/dev/null || true
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "$BT" >> "$GITHUB_PATH"
 
       - name: Build with apktool
         run: |
           apktool b . -o maya.apk --force
           ls -lh maya.apk
 
-      - name: Sign APK
+      # Android 11+ refuses v1-only (jarsigner) APKs; must sign with v2/v3
+      # via apksigner after zipalign. Keystore comes from repo secrets; if
+      # unset, a throwaway key is generated so the artifact still installs.
+      - name: Align and sign APK
         env:
           KS_B64: ${{ secrets.APKSIGNER_BASE64 }}
           PASS: ${{ secrets.APKSIGNER_STOREPASS }}
           ALIAS: ${{ secrets.APKSIGNER_ALIAS }}
         run: |
+          set -e
           if [ -n "$KS_B64" ]; then
             echo "$KS_B64" | base64 -d > maya.keystore
             PASS=${PASS:-maya12345}
@@ -49,8 +59,11 @@ jobs:
             PASS=ci_maya_pass
             ALIAS=maya
           fi
-          jarsigner -keystore maya.keystore -storepass "$PASS" -keypass "$PASS" -signedjar maya-signed.apk maya.apk "$ALIAS" 2>&1 | grep -v "^Warning:" || true
-          jarsigner -verify maya-signed.apk && echo "SIGN OK" || echo "sign verify failed (continuing)"
+          zipalign -f -p 4 maya.apk maya-aligned.apk
+          apksigner sign --ks maya.keystore --ks-key-alias "$ALIAS" \
+            --ks-pass "pass:$PASS" --key-pass "pass:$PASS" \
+            --out maya-signed.apk maya-aligned.apk
+          apksigner verify --verbose maya-signed.apk
           mv maya-signed.apk maya.apk
           ls -lh maya.apk
 
