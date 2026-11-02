@@ -20,13 +20,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
+      # GitHub ubuntu runners ship the Android SDK pre-installed.
+      # Install official apktool jar which bundles a working aapt.
       - name: Install apktool
         run: |
           sudo apt-get update
-          sudo apt-get install -y apktool
+          sudo apt-get install -y wget unzip
+          wget -q https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar -O /tmp/apktool.jar
+          printf '#!/bin/bash\nexec java -jar /tmp/apktool.jar "$@"\n' | sudo tee /usr/local/bin/apktool > /dev/null
+          sudo chmod +x /usr/local/bin/apktool
+          apktool --version
 
       - name: Build with apktool
         run: |
